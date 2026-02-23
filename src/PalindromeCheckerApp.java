@@ -1,22 +1,41 @@
 public class PalindromeCheckerApp {
+    public static void main(String[] args) {
+        System.out.println("PalindromeCheckerApp - UC10");
+        System.out.println("Version : 1.0");
+        System.out.println("System initialised successfully");
 
-        public static void main(String[] args) {
+        // Input with spaces and mixed casing
+        String input = "A man a plan a canal Panama";
 
-            System.out.println("PalindromeCheckerApp");
-            System.out.println("Version : 1.0");
-            System.out.println("System initialised successfully");
+        // Step 1: Normalize the string
+        // .toLowerCase() handles the case sensitivity
+        // .replaceAll("[^a-zA-Z0-9]", "") removes all non-alphanumeric characters (spaces, commas, etc.)
+        String cleanString = input.toLowerCase().replaceAll("[^a-zA-Z0-9]", "");
 
-            // Hardcoded string (String Literal)
-            String word = "madam";
+        System.out.println("Original: " + input);
+        System.out.println("Normalized: " + cleanString);
 
-            // Check if palindrome using simple if-else
-            if (word.equals("madam")) {  // Hardcoded check
-                System.out.println(word + " is a Palindrome.");
-            } else {
-                System.out.println(word + " is NOT a Palindrome.");
+        // Step 2: Use Two-Pointer logic for validation
+        boolean isPalindrome = true;
+        int left = 0;
+        int right = cleanString.length() - 1;
+
+        while (left < right) {
+            if (cleanString.charAt(left) != cleanString.charAt(right)) {
+                isPalindrome = false;
+                break;
             }
-
-            System.out.println("Program exited successfully.");
+            left++;
+            right--;
         }
-    }
 
+        // Step 3: Display Result
+        if (isPalindrome) {
+            System.out.println("Result: It is a Palindrome (Case & Space Ignored).");
+        } else {
+            System.out.println("Result: It is NOT a Palindrome.");
+        }
+
+        System.out.println("Program exited successfully.");
+    }
+}

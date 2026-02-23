@@ -1,43 +1,68 @@
-import java.util.ArrayDeque;
-import java.util.Deque;
+
+class Node {
+    char data;
+    Node next;
+    Node(char data) { this.data = data; }
+}
 
 public class PalindromeCheckerApp {
     public static void main(String[] args) {
-        System.out.println("PalindromeCheckerApp - UC7");
+        System.out.println("PalindromeCheckerApp - UC8");
         System.out.println("Version : 1.0");
         System.out.println("System initialised successfully");
 
         String input = "madam";
+        if (input.length() == 0) return;
 
-        // Using ArrayDeque as it's more efficient than LinkedList for Deque operations
-        Deque<Character> deque = new ArrayDeque<>();
-
-        // Step 1: Insert characters into the Deque
-        for (int i = 0; i < input.length(); i++) {
-            deque.addLast(input.charAt(i));
+        // Step 1: Convert String to Singly Linked List
+        Node head = new Node(input.charAt(0));
+        Node temp = head;
+        for (int i = 1; i < input.length(); i++) {
+            temp.next = new Node(input.charAt(i));
+            temp = temp.next;
         }
 
+        // Step 2: Find the middle using Fast and Slow Pointers
+        Node slow = head, fast = head;
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+
+        // Step 3: Reverse the second half of the list
+        Node secondHalf = reverseList(slow);
+        Node firstHalf = head;
+        Node secondHalfCopy = secondHalf; // To keep track for result
+
+        // Step 4: Compare halves
         boolean isPalindrome = true;
-
-        // Step 2: Compare front and rear elements
-        // A palindrome must have matching ends until 0 or 1 character remains
-        while (deque.size() > 1) {
-            char first = deque.removeFirst();
-            char last = deque.removeLast();
-
-            if (first != last) {
+        while (secondHalf != null) {
+            if (firstHalf.data != secondHalf.data) {
                 isPalindrome = false;
                 break;
             }
+            firstHalf = firstHalf.next;
+            secondHalf = secondHalf.next;
         }
 
-        // Step 3: Display Result
+        // Step 5: Display Result
         if (isPalindrome) {
             System.out.println(input + " is a Palindrome.");
         } else {
             System.out.println(input + " is NOT a Palindrome.");
         }
-
         System.out.println("Program exited successfully.");
+    }
+
+    // Helper method to reverse a Linked List
+    public static Node reverseList(Node head) {
+        Node prev = null, curr = head, next = null;
+        while (curr != null) {
+            next = curr.next;
+            curr.next = prev;
+            prev = curr;
+            curr = next;
+        }
+        return prev;
     }
 }

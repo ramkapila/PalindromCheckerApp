@@ -1,3 +1,10 @@
+
+class Node {
+    char data;
+    Node next;
+    Node(char data) { this.data = data; }
+}
+
 public class PalindromeCheckerApp {
     public static void main(String[] args) {
         System.out.println("PalindromeCheckerApp - UC9");

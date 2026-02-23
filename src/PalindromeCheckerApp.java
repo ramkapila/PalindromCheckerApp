@@ -1,22 +1,32 @@
 public class PalindromeCheckerApp {
 
-        public static void main(String[] args) {
+    public static void main(String[] args) {
+        System.out.println("PalindromeCheckerApp - UC5");
+        System.out.println("Version : 1.0");
+        System.out.println("System initialised successfully");
 
-            System.out.println("PalindromeCheckerApp");
-            System.out.println("Version : 1.0");
-            System.out.println("System initialised successfully");
+        String input = "madam";
+        Stack<Character> stack = new Stack<>();
 
-            // Hardcoded string (String Literal)
-            String word = "madam";
+        // Step 1: Push all characters of the string onto the stack
+        for (int i = 0; i < input.length(); i++) {
+            stack.push(input.charAt(i));
+        }
 
-            // Check if palindrome using simple if-else
-            if (word.equals("madam")) {  // Hardcoded check
-                System.out.println(word + " is a Palindrome.");
-            } else {
-                System.out.println(word + " is NOT a Palindrome.");
-            }
+        // Step 2: Pop characters and build the reversed string
+        String reversed = "";
+        while (!stack.isEmpty()) {
+            reversed += stack.pop();
+        }
 
-            System.out.println("Program exited successfully.");
+        // Step 3: Compare and Display Result
+        if (input.equals(reversed)) {
+            System.out.println(input + " is a Palindrome.");
+        } else {
+            System.out.println(input + " is NOT a Palindrome.");
+        }
+
+        System.out.println("Program exited successfully.");
         }
     }
 

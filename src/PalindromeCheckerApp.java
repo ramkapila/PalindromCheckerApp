@@ -1,28 +1,37 @@
 public class PalindromeCheckerApp {
 
     public static void main(String[] args) {
-        System.out.println("PalindromeCheckerApp");
+        System.out.println("PalindromeCheckerApp - UC4");
         System.out.println("Version : 1.0");
         System.out.println("System initialised successfully");
 
-        // Input String
-        String original = "madam";
-        String reversed = "";
+        String input = "madam";
 
-        // UC3 Flow: Reverse string using a for-loop
-        // We start from the last index (length - 1) and move to 0
-        for (int i = original.length() - 1; i >= 0; i--) {
-            reversed = reversed + original.charAt(i); // String Concatenation
+        // Step 1: Convert String to Character Array
+        char[] charArray = input.toCharArray();
+
+        // Step 2: Initialize Two Pointers
+        int left = 0;
+        int right = charArray.length - 1;
+        boolean isPalindrome = true;
+
+        // Step 3: Compare characters using Two-Pointer Approach
+        while (left < right) {
+            if (charArray[left] != charArray[right]) {
+                isPalindrome = false;
+                break; // Exit early if a mismatch is found
+            }
+            left++;  // Move front pointer forward
+            right--; // Move back pointer backward
         }
 
-        // Compare original and reversed using .equals()
-        if (original.equals(reversed)) {
-            System.out.println(original + " is a Palindrome.");
+        // Step 4: Display Result
+        if (isPalindrome) {
+            System.out.println(input + " is a Palindrome.");
         } else {
-            System.out.println(original + " is NOT a Palindrome.");
+            System.out.println(input + " is NOT a Palindrome.");
         }
 
         System.out.println("Program exited successfully.");
-        }
     }
-
+}

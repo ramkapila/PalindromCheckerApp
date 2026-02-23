@@ -1,50 +1,41 @@
-
-class Node {
-    char data;
-    Node next;
-    Node(char data) { this.data = data; }
-}
-
 public class PalindromeCheckerApp {
     public static void main(String[] args) {
-        System.out.println("PalindromeCheckerApp - UC9");
+        System.out.println("PalindromeCheckerApp - UC10");
         System.out.println("Version : 1.0");
         System.out.println("System initialised successfully");
 
-        String input = "madam";
+        // Input with spaces and mixed casing
+        String input = "A man a plan a canal Panama";
 
-        // Step 1: Call the recursive function
-        boolean isPalindrome = checkPalindrome(input, 0, input.length() - 1);
+        // Step 1: Normalize the string
+        // .toLowerCase() handles the case sensitivity
+        // .replaceAll("[^a-zA-Z0-9]", "") removes all non-alphanumeric characters (spaces, commas, etc.)
+        String cleanString = input.toLowerCase().replaceAll("[^a-zA-Z0-9]", "");
 
-        // Step 2: Display Result
+        System.out.println("Original: " + input);
+        System.out.println("Normalized: " + cleanString);
+
+        // Step 2: Use Two-Pointer logic for validation
+        boolean isPalindrome = true;
+        int left = 0;
+        int right = cleanString.length() - 1;
+
+        while (left < right) {
+            if (cleanString.charAt(left) != cleanString.charAt(right)) {
+                isPalindrome = false;
+                break;
+            }
+            left++;
+            right--;
+        }
+
+        // Step 3: Display Result
         if (isPalindrome) {
-            System.out.println(input + " is a Palindrome.");
+            System.out.println("Result: It is a Palindrome (Case & Space Ignored).");
         } else {
-            System.out.println(input + " is NOT a Palindrome.");
+            System.out.println("Result: It is NOT a Palindrome.");
         }
 
         System.out.println("Program exited successfully.");
-    }
-
-    /**
-     * Recursive method to check palindrome
-     * @param str The string to check
-     * @param low Starting index
-     * @param high Ending index
-     * @return true if palindrome, false otherwise
-     */
-    public static boolean checkPalindrome(String str, int low, int high) {
-        // Base Case 1: If pointers cross or meet, it's a palindrome
-        if (low >= high) {
-            return true;
-        }
-
-        // Base Case 2: If characters at pointers don't match, it's NOT a palindrome
-        if (str.charAt(low) != str.charAt(high)) {
-            return false;
-        }
-
-        // Recursive Step: Check the inner substring
-        return checkPalindrome(str, low + 1, high - 1);
     }
 }

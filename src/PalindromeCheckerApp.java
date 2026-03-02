@@ -35,7 +35,6 @@ public class UseCase13PalindromeCheckerApp {
             }
             return true;
         }
-    }
 
     // --- MAIN METHOD ---
     public static void main(String[] args) {

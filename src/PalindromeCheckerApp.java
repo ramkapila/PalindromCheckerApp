@@ -1,41 +1,87 @@
+import java.util.Stack;
+import java.util.Deque;
+import java.util.ArrayDeque;
+
 public class PalindromeCheckerApp {
     public static void main(String[] args) {
         System.out.println("PalindromeCheckerApp - UC10");
         System.out.println("Version : 1.0");
         System.out.println("System initialised successfully");
 
-        // Input with spaces and mixed casing
-        String input = "A man a plan a canal Panama";
+    // --- UC12: Strategy Pattern Components ---
 
-        // Step 1: Normalize the string
-        // .toLowerCase() handles the case sensitivity
-        // .replaceAll("[^a-zA-Z0-9]", "") removes all non-alphanumeric characters (spaces, commas, etc.)
-        String cleanString = input.toLowerCase().replaceAll("[^a-zA-Z0-9]", "");
+    // 1. Strategy Interface (Static allows access within the static Main)
+    public interface PalindromeStrategy {
+        boolean isValid(String text);
+    }
 
-        System.out.println("Original: " + input);
-        System.out.println("Normalized: " + cleanString);
-
-        // Step 2: Use Two-Pointer logic for validation
-        boolean isPalindrome = true;
-        int left = 0;
-        int right = cleanString.length() - 1;
-
-        while (left < right) {
-            if (cleanString.charAt(left) != cleanString.charAt(right)) {
-                isPalindrome = false;
-                break;
+    // 2. Stack Strategy implementation
+    public static class StackStrategy implements PalindromeStrategy {
+        @Override
+        public boolean isValid(String text) {
+            String cleaned = text.toLowerCase().replaceAll("[^a-z0-9]", "");
+            Stack<Character> stack = new Stack<>();
+            for (char c : cleaned.toCharArray()) {
+                stack.push(c);
             }
-            left++;
-            right--;
+            StringBuilder reversed = new StringBuilder();
+            while (!stack.isEmpty()) {
+                reversed.append(stack.pop());
+            }
+            return cleaned.equals(reversed.toString());
+        }
+    }
+
+    // 3. Deque Strategy implementation
+    public static class DequeStrategy implements PalindromeStrategy {
+        @Override
+        public boolean isValid(String text) {
+            String cleaned = text.toLowerCase().replaceAll("[^a-z0-9]", "");
+            Deque<Character> deque = new ArrayDeque<>();
+            for (char c : cleaned.toCharArray()) {
+                deque.addLast(c);
+            }
+            while (deque.size() > 1) {
+                if (!deque.removeFirst().equals(deque.removeLast())) {
+                    return false;
+                }
+            }
+            return true;
+        }
+    }
+
+    // 4. Context Class
+    public static class PalindromeService {
+        private PalindromeStrategy strategy;
+
+        public void setStrategy(PalindromeStrategy strategy) {
+            this.strategy = strategy;
         }
 
-        // Step 3: Display Result
-        if (isPalindrome) {
-            System.out.println("Result: It is a Palindrome (Case & Space Ignored).");
-        } else {
-            System.out.println("Result: It is NOT a Palindrome.");
+        public boolean check(String text) {
+            if (strategy == null) return false;
+            return strategy.isValid(text);
         }
 
+    // --- MAIN METHOD ---
+    public static void main(String[] args) {
+        System.out.println("PalindromeCheckerApp");
+        System.out.println("Version : 1.2 (Strategy Pattern)");
+        System.out.println("System initialised successfully");
+        System.out.println("-----------------------------------");
+
+        String word = "madam";
+        PalindromeService service = new PalindromeService();
+
+        // Testing Stack Strategy
+        service.setStrategy(new StackStrategy());
+        System.out.println("[Stack]  Is '" + word + "' a palindrome? " + service.check(word));
+
+        // Testing Deque Strategy
+        service.setStrategy(new DequeStrategy());
+        System.out.println("[Deque]  Is '" + word + "' a palindrome? " + service.check(word));
+
+        System.out.println("-----------------------------------");
         System.out.println("Program exited successfully.");
     }
 }

@@ -1,39 +1,76 @@
-public class PalindromeCheckerApp {
-    public static void main(String[] args) {
-        System.out.println("PalindromeCheckerApp - UC10");
-        System.out.println("Version : 1.0");
-        System.out.println("System initialised successfully");
+import java.util.Stack;
+import java.util.Deque;
+import java.util.ArrayDeque;
 
-        // Input with spaces and mixed casing
-        String input = "A man a plan a canal Panama";
+public class UseCase13PalindromeCheckerApp {
 
-        // Step 1: Normalize the string
-        // .toLowerCase() handles the case sensitivity
-        // .replaceAll("[^a-zA-Z0-9]", "") removes all non-alphanumeric characters (spaces, commas, etc.)
-        String cleanString = input.toLowerCase().replaceAll("[^a-zA-Z0-9]", "");
+    // --- UC12/13: Strategy Pattern Components ---
 
-        System.out.println("Original: " + input);
-        System.out.println("Normalized: " + cleanString);
+    public interface PalindromeStrategy {
+        boolean isValid(String text);
+    }
 
-        // Step 2: Use Two-Pointer logic for validation
-        boolean isPalindrome = true;
-        int left = 0;
-        int right = cleanString.length() - 1;
+    // Implementation 1: Stack (LIFO)
+    public static class StackStrategy implements PalindromeStrategy {
+        @Override
+        public boolean isValid(String text) {
+            String cleaned = text.toLowerCase();
+            Stack<Character> stack = new Stack<>();
+            for (char c : cleaned.toCharArray()) stack.push(c);
+            StringBuilder reversed = new StringBuilder();
+            while (!stack.isEmpty()) reversed.append(stack.pop());
+            return cleaned.equals(reversed.toString());
+        }
+    }
 
-        while (left < right) {
-            if (cleanString.charAt(left) != cleanString.charAt(right)) {
-                isPalindrome = false;
-                break;
+    // Implementation 2: Deque (Double-Ended)
+    public static class DequeStrategy implements PalindromeStrategy {
+        @Override
+        public boolean isValid(String text) {
+            String cleaned = text.toLowerCase();
+            Deque<Character> deque = new ArrayDeque<>();
+            for (char c : cleaned.toCharArray()) deque.addLast(c);
+            while (deque.size() > 1) {
+                if (!deque.removeFirst().equals(deque.removeLast())) return false;
             }
-            left++;
-            right--;
+            return true;
         }
 
-        // Step 3: Display Result
-        if (isPalindrome) {
-            System.out.println("Result: It is a Palindrome (Case & Space Ignored).");
+    // --- MAIN METHOD ---
+    public static void main(String[] args) {
+        System.out.println("PalindromeCheckerApp");
+        System.out.println("Version : 1.3 (Performance Comparison)");
+        System.out.println("System initialised successfully");
+        System.out.println("-----------------------------------");
+
+        String word = "madamimadam"; // A longer palindrome for better measurement
+
+        // Define strategies
+        PalindromeStrategy stackAlgo = new StackStrategy();
+        PalindromeStrategy dequeAlgo = new DequeStrategy();
+
+        // 1. Measure Stack Strategy
+        long startTimeStack = System.nanoTime();
+        boolean isStackPalindrome = stackAlgo.isValid(word);
+        long endTimeStack = System.nanoTime();
+        long durationStack = endTimeStack - startTimeStack;
+
+        // 2. Measure Deque Strategy
+        long startTimeDeque = System.nanoTime();
+        boolean isDequePalindrome = dequeAlgo.isValid(word);
+        long endTimeDeque = System.nanoTime();
+        long durationDeque = endTimeDeque - startTimeDeque;
+
+        // --- Display Results ---
+        System.out.println("Algorithm Comparison for: " + word);
+        System.out.println("1. Stack Strategy: " + durationStack + " ns | Result: " + isStackPalindrome);
+        System.out.println("2. Deque Strategy: " + durationDeque + " ns | Result: " + isDequePalindrome);
+        System.out.println("-----------------------------------");
+
+        if (durationStack < durationDeque) {
+            System.out.println("Winner: Stack Strategy (faster for this instance)");
         } else {
-            System.out.println("Result: It is NOT a Palindrome.");
+            System.out.println("Winner: Deque Strategy (faster for this instance)");
         }
 
         System.out.println("Program exited successfully.");

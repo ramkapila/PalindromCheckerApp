@@ -3,6 +3,10 @@ import java.util.Deque;
 import java.util.ArrayDeque;
 
 public class PalindromeCheckerApp {
+    public static void main(String[] args) {
+        System.out.println("PalindromeCheckerApp - UC10");
+        System.out.println("Version : 1.0");
+        System.out.println("System initialised successfully");
 
     // --- UC12: Strategy Pattern Components ---
 
@@ -58,7 +62,6 @@ public class PalindromeCheckerApp {
             if (strategy == null) return false;
             return strategy.isValid(text);
         }
-    }
 
     // --- MAIN METHOD ---
     public static void main(String[] args) {
